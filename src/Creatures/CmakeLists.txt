@@ -1,0 +1,33 @@
+CollectSourceFiles(
+  ${CMAKE_CURRENT_SOURCE_DIR}
+  PRIVATE_SOURCES)
+
+GroupSources(${CMAKE_CURRENT_SOURCE_DIR})
+
+add_library(Creatures
+  ${PRIVATE_SOURCES}
+)
+
+INCLUDE_DIRECTORIES(${SFML_LIB}/include ${TINY_XML_LIB}/include)
+
+# LINK EXTERNAL LIBRARIES TO EXECUTABLE
+LINK_DIRECTORIES(${SFML_LIB}/lib ${TINY_XML_LIB}/lib)
+
+CollectIncludeDirectories(
+  ${CMAKE_CURRENT_SOURCE_DIR}
+  PUBLIC_INCLUDES)
+
+target_include_directories(Creatures
+  PUBLIC
+    ${CMAKE_BINARY_DIR}
+    ${PUBLIC_INCLUDES}
+    GameObjects
+    GameEngine
+  PRIVATE
+    ${CMAKE_CURRENT_BINARY_DIR})
+
+target_link_libraries(Creatures
+  PUBLIC
+    GameObjects
+    GameEngine
+    )
