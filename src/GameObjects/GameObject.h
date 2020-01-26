@@ -1,4 +1,4 @@
-#ifndef GAME_OGJECT_H
+#ifndef GAME_OBJECT_H
 #define GAME_OBJECT_H
 
 #include <functional>
@@ -158,4 +158,4 @@ namespace GameObjects
 		Vector _pos, _size;
 	};
 }
-#endif // !GAME_OGJECT_H
+#endif // !GAME_OBJECT_H
