@@ -1,0 +1,4 @@
+add_subdirectory(GameEngine)
+add_subdirectory(Creatures)
+add_subdirectory(GameObjects)
+add_subdirectory(MarioGame)
