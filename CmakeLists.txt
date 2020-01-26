@@ -1,0 +1,46 @@
+# Cmake minimum required version
+cmake_minimum_required(VERSION 3.5)
+
+# Project name
+project(SuperMario)
+
+# set macro-directory
+list(APPEND CMAKE_MODULE_PATH
+  "${CMAKE_SOURCE_DIR}/cmake/macros")
+
+# build in Release-mode by default if not explicitly set
+if( NOT CMAKE_BUILD_TYPE )
+  set(CMAKE_BUILD_TYPE "RelWithDebInfo")
+endif()
+
+# set default buildoptions and print them
+include(cmake/options.cmake)
+
+include(GroupSources)
+include(AutoCollect)
+
+# BUILD EXTERNAL LIBRARIES
+include(${CMAKE_ROOT}/Modules/ExternalProject.cmake)
+ExternalProject_Add(SFML 
+		#GIT_REPOSITORY https://github.com/SFML/SFML.git GIT_TAG 2.5.1 
+		SOURCE_DIR  ${CMAKE_SOURCE_DIR}/dep/SFML 
+    		CMAKE_ARGS 
+			-DCMAKE_INSTALL_PREFIX:PATH=<INSTALL_DIR>
+			-DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE})
+ExternalProject_Get_Property(SFML INSTALL_DIR)
+set(SFML_LIB ${INSTALL_DIR})
+
+ExternalProject_Add(TinyXml2 
+		#GIT_REPOSITORY https://github.com/leethomason/tinyxml2.git
+		SOURCE_DIR  ${CMAKE_SOURCE_DIR}/dep/tinyxml2
+    		CMAKE_ARGS 
+			-DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
+			-DCMAKE_INSTALL_PREFIX:PATH=<INSTALL_DIR>)
+ExternalProject_Get_Property(TinyXml2 INSTALL_DIR)
+set(TINY_XML_LIB ${INSTALL_DIR})
+
+# add dependencies
+add_subdirectory(dep)
+
+# add core sources
+add_subdirectory(src)

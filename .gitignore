@@ -1,0 +1,15 @@
+Build/
+build/
+.vs
+.vscode
+
+*.exe
+*.obj
+*.cache
+*.target
+*.autosave
+
+CmakeLists.txt.user
+
+dep/SFML
+dep/tinyxml2
