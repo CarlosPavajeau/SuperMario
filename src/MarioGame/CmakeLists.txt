@@ -1,0 +1,46 @@
+CollectSourceFiles(
+  ${CMAKE_CURRENT_SOURCE_DIR}
+  PRIVATE_SOURCES)
+
+GroupSources(${CMAKE_CURRENT_SOURCE_DIR})
+
+add_executable(SuperMario ${PRIVATE_SOURCES})
+
+INCLUDE_DIRECTORIES(${SFML_LIB}/include ${TINY_XML_LIB}/include)
+
+# LINK EXTERNAL LIBRARIES TO EXECUTABLE
+LINK_DIRECTORIES(${SFML_LIB}/lib ${TINY_XML_LIB}/lib)
+
+if (MSVC)
+	set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT SuperMario)
+	set_target_properties( SuperMario PROPERTIES RUNTIME_OUTPUT_DIRECTORY_RELEASE ${CMAKE_SOURCE_DIR}Build)
+	set_target_properties( SuperMario PROPERTIES RUNTIME_OUTPUT_DIRECTORY_DEBUG ${CMAKE_SOURCE_DIR}Build)
+	set(CMAKE_EXE_LINKER_FLAGS_RELEASE ${CMAKE_EXE_LINKER_FLAGS} SUBSYSTEMWINDOWS ENTRYmainCRTStartup)
+endif(MSVC)
+
+# ADD DEPENDISIES FOR EXECUTABLE
+add_dependencies(SuperMario SFML TinyXml2)
+
+TARGET_LINK_LIBRARIES(SuperMario 
+					optimized sfml-system		debug sfml-system-d 
+					optimized sfml-window		debug sfml-window-d 
+					optimized sfml-graphics		debug sfml-graphics-d 
+					optimized sfml-audio		debug sfml-audio-d 
+					optimized tinyxml2		debug tinyxml2d
+					Creatures
+					GameObjects
+					GameEngine)  
+
+
+CollectIncludeDirectories(
+  ${CMAKE_CURRENT_SOURCE_DIR}
+  PUBLIC_INCLUDES)
+
+target_include_directories(SuperMario
+	PUBLIC
+		${PUBLIC_INCLUDES}
+		Creatures
+		GameObjects
+		GameEngine
+	PRIVATE
+		${CMAKE_CURRENT_BINARY_DIR})
