@@ -35,33 +35,43 @@ namespace GameEngine
 	{
 		switch (anim_type)
 		{
-		case AnimType::Manual:
-			break;
-		case AnimType::Forward:
-			int current_slide = int(index);
-			if (current_slide < sprites.size())
+			case AnimType::Manual:
+			{
+				break;
+			}
+			case AnimType::Forward:
+			{
+				int current_slide = int(index);
+				if (current_slide < sprites.size())
+					SetSpriteIndex(current_slide);
+				else
+					return;
+				break;
+			}
+			case AnimType::ForwardStop:
+			{
+				int current_slide = int(index);
+				if (current_slide < sprites.size())
+					SetSpriteIndex(current_slide);
+				break;
+			}
+			case AnimType::ForwardCycle:
+			{
+				int current_slide = int(index) % sprites.size();
 				SetSpriteIndex(current_slide);
-			else
-				return;
-			break;
-		case AnimType::ForwardStop:
-			int current_slide = int(index);
-			if (current_slide < sprites.size())
+				break;
+			}
+			case AnimType::ForwardBackwardCycle:
+			{
+				int size = sprites.size();
+				int current_slide = int(index) % (size * 2);
+				if (current_slide > size - 1)
+					current_slide = 2 * size - 1 - current_slide;
 				SetSpriteIndex(current_slide);
-			break;
-		case AnimType::ForwardCycle:
-			int current_slide = int(index) % sprites.size();
-			SetSpriteIndex(current_slide);
-			break;
-		case AnimType::ForwardBackwardCycle:
-			int size = sprites.size();
-			int current_slide = int(index) % (size * 2);
-			if (current_slide > size - 1)
-				current_slide = 2 * size - 1 - current_slide;
-			SetSpriteIndex(current_slide);
-			break;
-		default:
-			break;
+				break;
+			}
+			default:
+				break;
 		}
 
 		wnd->draw(*current_sprite);

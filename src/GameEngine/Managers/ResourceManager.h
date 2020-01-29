@@ -22,7 +22,7 @@ namespace GameEngine
 			~ResourceManager()
 			{
 				return;
-				for (auto r : m_resources)
+				for (auto r : resources)
 					if (r.second != nullptr)
 					{
 						delete r.second;

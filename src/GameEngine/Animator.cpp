@@ -8,7 +8,7 @@ namespace GameEngine
 			delete anim.second;
 	}
 
-	void Animator::Create(const std::string& name, const sf::Texture& texture, const Vector& off_set, const Vector& size, int cols, int rows, float speed, AnimType anim_type = AnimType::ForwardCycle)
+	void Animator::Create(const std::string& name, const sf::Texture& texture, const Vector& off_set, const Vector& size, int cols, int rows, float speed, AnimType anim_type)
 	{
 		SpriteSheet* animation = new SpriteSheet();
 
