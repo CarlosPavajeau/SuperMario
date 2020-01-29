@@ -64,8 +64,8 @@ namespace GameObjects
 		template <typename T>
 		T* FindObjectByName(const std::string& name)
 		{
-			auto it = std::find_if(m_objects.begin(), m_objects.end(), [this, &name](const CGameObject* obj) -> bool { return obj->getName() == name;  });
-			if (it != m_objects.end())
+			auto it = std::find_if(_objects.begin(), _objects.end(), [this, &name](const GameObject* obj) -> bool { return obj->GetName() == name;  });
+			if (it != _objects.end())
 				return dynamic_cast<T*>(*it);
 			return nullptr;
 		}
@@ -73,8 +73,8 @@ namespace GameObjects
 		template <typename T>
 		T* FindObjectByType()
 		{
-			for (auto& obj : m_objects)
-				if (IsTypeOf<T>(obj))
+			for (auto& obj : _objects)
+				if (dynamic_cast<T*>(obj) != nullptr)
 					return (T*)obj;
 			return nullptr;
 		}
@@ -83,12 +83,12 @@ namespace GameObjects
 		std::vector<T*> FindObjectsByType()
 		{
 			std::vector<T*> objects;
-			for (auto& obj : m_objects)
+			for (auto& obj : _objects)
 			{
-				if (IsTypeOf<T>(obj))
+				if (dynamic_cast<T*>(obj) != nullptr)
 					objects.push_back((T*)obj);
 
-				auto objects_temp = obj->findObjectsByType<T>();
+				auto objects_temp = obj->FindObjectsByType<T>();
 				if (!objects_temp.empty())
 					objects.insert(objects.end(), objects_temp.begin(), objects_temp.end());
 			}
@@ -98,7 +98,7 @@ namespace GameObjects
 		template <typename T>
 		T* CastTo()
 		{
-			assert(IsTypeOf<T>(this));
+			assert(dynamic_cast<T*>(this));
 			return (T*)this;
 		}
 
