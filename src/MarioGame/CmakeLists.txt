@@ -4,12 +4,12 @@ CollectSourceFiles(
 
 GroupSources(${CMAKE_CURRENT_SOURCE_DIR})
 
-add_executable(SuperMario ${PRIVATE_SOURCES})
-
 INCLUDE_DIRECTORIES(${SFML_LIB}/include ${TINY_XML_LIB}/include)
 
 # LINK EXTERNAL LIBRARIES TO EXECUTABLE
 LINK_DIRECTORIES(${SFML_LIB}/lib ${TINY_XML_LIB}/lib)
+
+add_executable(SuperMario ${PRIVATE_SOURCES})
 
 if (MSVC)
 	set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT SuperMario)
@@ -21,7 +21,7 @@ endif(MSVC)
 # ADD DEPENDISIES FOR EXECUTABLE
 add_dependencies(SuperMario SFML TinyXml2)
 
-TARGET_LINK_LIBRARIES(SuperMario 
+target_link_libraries(SuperMario 
 					optimized sfml-system		debug sfml-system-d 
 					optimized sfml-window		debug sfml-window-d 
 					optimized sfml-graphics		debug sfml-graphics-d 
@@ -44,3 +44,14 @@ target_include_directories(SuperMario
 		GameEngine
 	PRIVATE
 		${CMAKE_CURRENT_BINARY_DIR})
+
+# POST BUILD SCRIPTS
+set(POST_LIB_DIR "lib")
+if (WIN32)
+	set(POST_LIB_DIR "bin")
+endif()
+
+ADD_CUSTOM_COMMAND(TARGET SuperMario POST_BUILD
+	COMMAND ${CMAKE_COMMAND} -E copy_directory "${SFML_LIB}/${POST_LIB_DIR}" "${CMAKE_CURRENT_BINARY_DIR}"
+	COMMAND ${CMAKE_COMMAND} -E copy_directory "${TINY_XML_LIB}/${POST_LIB_DIR}" "${CMAKE_CURRENT_BINARY_DIR}"
+	COMMAND ${CMAKE_COMMAND} -E copy_directory "${CMAKE_SOURCE_DIR}/res" "${CMAKE_CURRENT_BINARY_DIR}/res")
