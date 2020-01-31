@@ -172,7 +172,8 @@ namespace GameEngine
 
 		Rect::Rect()
 		{
-			Right = Left = Buttom = Top = Width = Height = 0;
+			Left = Top = Width = Height = 0;
+			Inicialize();
 		}
 
 		Rect::Rect(float left, float top, float width, float height) : Left(left), Top(top), Width(width), Height(height) 
@@ -232,8 +233,8 @@ namespace GameEngine
 
 			left = std::max(Left, rect.Left);
 			top = std::max(Top, rect.Top);
-			height = std::max(Height, rect.Height);
-			width = std::max(Width, rect.Width);
+			height = std::min(Buttom, rect.Buttom) - top;
+			width = std::min(Right, rect.Right) - left;
 
 			return Rect(left, top, width, height);
 		}

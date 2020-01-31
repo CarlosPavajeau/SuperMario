@@ -16,7 +16,7 @@ namespace GameEngine
 		animation->SetAnimType(anim_type);
 		animation->SetSpeed(speed);
 
-		assert(!animation[name]);
+		assert(!animations[name]);
 
 		animations[name] = animation;
 
@@ -29,7 +29,7 @@ namespace GameEngine
 
 		animation->Load(texture, { { (int)rect.Left, (int)rect.Top, (int)rect.Width, (int)rect.Height } });
 
-		assert(!animation[name]);
+		assert(!animations[name]);
 
 		animations[name] = animation;
 
@@ -44,7 +44,7 @@ namespace GameEngine
 		animation->SetAnimType(AnimType::ForwardCycle);
 		animation->SetSpeed(speed);
 
-		assert(!animation[name]);
+		assert(!animations[name]);
 
 		animations[name] = animation;
 
