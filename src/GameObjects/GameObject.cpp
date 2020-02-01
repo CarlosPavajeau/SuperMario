@@ -406,6 +406,6 @@ namespace GameObjects
 		else if (name == "Y")
 			SetPosition(_pos.X, _properties["Y"].AsFloat());
 		else if (name == "Name")
-			SetName(_properties["name"].AsString());
+			SetName(_properties["Name"].AsString());
 	}
 }

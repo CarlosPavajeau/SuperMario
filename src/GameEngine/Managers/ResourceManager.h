@@ -39,6 +39,7 @@ namespace GameEngine
 				if (!resources[name]->loadFromFile(file_path))
 					throw std::runtime_error(("Can't load resource: " + file_path).c_str());
 			}
+
 			T* Get(const std::string& name)
 			{
 				if (resources.find(name) == resources.end())
