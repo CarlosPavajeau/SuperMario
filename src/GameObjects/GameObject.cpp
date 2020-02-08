@@ -38,7 +38,7 @@ namespace GameObjects
 	Property::Property(float float_value)
 	{
 		_type = Type::Float;
-		bool_data = float_value;
+		float_data = float_value;
 	}
 
 	Property::~Property()
@@ -72,7 +72,7 @@ namespace GameObjects
 		return *this;
 	}
 
-	Property& Property::operator=(Property&& property)
+	Property& Property::operator=(Property&& property) noexcept
 	{
 		*this = property;
 
@@ -390,8 +390,8 @@ namespace GameObjects
 
 	void GameObject::SetBounds(const Rect& rect)
 	{
-		_pos = rect.LeftTop;
-		_size = rect.Size;
+		_pos = rect.LeftTop();
+		_size = rect.Size();
 	}
 
 	void GameObject::SetSize(const Vector& size)

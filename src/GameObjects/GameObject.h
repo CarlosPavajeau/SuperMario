@@ -23,7 +23,7 @@ namespace GameObjects
 		~Property();
 
 		Property& operator=(const Property& property);
-		Property& operator=(Property&& property);
+		Property& operator=(Property&& property) noexcept;
 
 		bool AsBool() const;
 		int AsInt() const;
