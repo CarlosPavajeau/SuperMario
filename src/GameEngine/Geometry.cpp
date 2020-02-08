@@ -21,7 +21,7 @@ namespace GameEngine
 			int length = 0;
 			
 			for (int i = 1; i < path.size(); ++i)
-				length += (path[i] - path[i - 1]).Lenght;
+				length += (path[i] - path[i - 1]).Lenght();
 			return length;
 		}
 
@@ -36,30 +36,18 @@ namespace GameEngine
 
 		Vector::Vector(float x, float y) : X(x), Y(y)
 		{
-			Inicialize();
+			
 		}
 
 		Vector::Vector(int x, int y) : X((float)x), Y((float)y)
 		{
-			Inicialize();
+			
 		}
 
 		Vector::Vector(const sf::Vector2f& vector)
 		{
 			X = vector.x;
 			Y = vector.y;
-
-			Inicialize();
-		}
-
-		void Vector::Inicialize()
-		{
-			Lenght = sqrt(X * X + Y * Y);
-
-			Angle = atan2(X, Y) / PI * 180;
-
-			if (Angle < 0)
-				Angle += 360;
 		}
 
 		Vector Vector::operator+(const Vector& right) const
@@ -120,6 +108,19 @@ namespace GameEngine
 			return Y * 10000 + X < right.Y * 10000 + right.X;
 		}
 
+		float Vector::Lenght() const
+		{
+			return std::sqrt(X * X + Y * Y);
+		}
+
+		float Vector::Angle() const
+		{
+			float angle = std::atan2(X, Y) / PI * 180;
+			if (angle < 0)
+				angle += 360;
+			return angle;
+		}
+
 		Vector::operator sf::Vector2f() const
 		{
 			return sf::Vector2f(X, Y);
@@ -127,15 +128,13 @@ namespace GameEngine
 
 		Vector Vector::Normalized() const
 		{
-			return Vector(X / Lenght, Y / Lenght);
+			return Vector(X / Lenght(), Y / Lenght());
 		}
 
 		void Vector::Normalize()
 		{
-			X /= Lenght;
-			Y /= Lenght;
-
-			Lenght = sqrt(X * X + Y * Y);
+			X /= Lenght();
+			Y /= Lenght();
 		}
 
 		Vector Round(const Vector& vector)
@@ -173,52 +172,38 @@ namespace GameEngine
 		Rect::Rect()
 		{
 			Left = Top = Width = Height = 0;
-			Inicialize();
 		}
 
 		Rect::Rect(float left, float top, float width, float height) : Left(left), Top(top), Width(width), Height(height) 
 		{
-			Inicialize();
+
 		}
 
 		Rect::Rect(const Vector& top_left, const Vector& size) : Left(top_left.X), Top(top_left.Y), Width(size.X), Height(size.Y)
 		{
-			Inicialize();
-		}
 
-		void Rect::Inicialize()
-		{
-			Right = Left + Width;
-			Buttom = Top + Height;
-
-			LeftTop = Vector(Left, Top);
-			RightTop = Vector(Right, Top);
-			LeftButton = Vector(Left, Buttom);
-			RightButton = Vector(Right, Buttom);
-			Center = Vector((Left + Width) / 2, (Top + Height) / 2);
-			Size = Vector(Width, Height);
 		}
 
 		bool Rect::IsContain(const Vector& point) const
 		{
 			return (point.X >= Left) && (point.Y >= Top) &&
-				(point.X < Right) && (point.Y < Buttom);
+				(point.X < Right()) && (point.Y < Bottom());
 		}
 
 		bool Rect::IsContain(const Rect& rect) const
 		{
-			return (rect.Left >= Left) && (rect.Right <= Right) &&
-				(rect.Top >= Top) && (rect.Buttom <= Buttom);
+			return (rect.Left >= Left) && (rect.Right() <= Right()) &&
+				(rect.Top >= Top) && (rect.Bottom() <= Bottom());
 		}
 
 		bool Rect::IsContainByX(const Vector& point) const
 		{
-			return (point.X >= Left) && (point.X < Right);
+			return (point.X >= Left) && (point.X < Right());
 		}
 
 		bool Rect::IsContainByY(const Vector& point) const
 		{
-			return (point.Y >= Top) && (point.Y < Buttom);
+			return (point.Y >= Top) && (point.Y < Bottom());
 		}
 
 		bool Rect::IsIntersect(const Rect& rect) const
@@ -233,8 +218,8 @@ namespace GameEngine
 
 			left = std::max(Left, rect.Left);
 			top = std::max(Top, rect.Top);
-			height = std::min(Buttom, rect.Buttom) - top;
-			width = std::min(Right, rect.Right) - left;
+			height = std::min(Bottom(), rect.Bottom()) - top;
+			width = std::min(Right(), rect.Right()) - left;
 
 			return Rect(left, top, width, height);
 		}
@@ -259,26 +244,22 @@ namespace GameEngine
 		{
 			Width += Left - left;
 			Left = left;
-			Right = Width + Left;
 		}
 
 		void Rect::SetRight(int right)
 		{
 			Width = right - Left;
-			Right = Width + Left;
 		}
 
 		void Rect::SetTop(int top)
 		{
 			Height += Top - top;
 			Top = top;
-			Buttom = Top + Height;
 		}
 
-		void Rect::SetButtom(int buttom)
+		void Rect::SetBottom(int buttom)
 		{
 			Height = buttom - Top;
-			Buttom = Top + Height;
 		}
 
 		void Rect::Normalize()
@@ -299,6 +280,46 @@ namespace GameEngine
 		Rect Rect::Moved(const Vector& diff) const
 		{
 			return Rect(Left + diff.X, Top + diff.X, Width, Height);
+		}
+
+		float Rect::Right() const
+		{
+			return Left + Width;
+		}
+
+		float Rect::Bottom() const
+		{
+			return Top + Height;
+		}
+
+		Vector Rect::LeftTop() const
+		{
+			return Vector(Left, Top);
+		}
+
+		Vector Rect::RightTop() const
+		{
+			return Vector(Right(), Top);
+		}
+
+		Vector Rect::LeftButton() const
+		{
+			return Vector(Left, Bottom());
+		}
+
+		Vector Rect::RightBottom() const
+		{
+			return Vector(Right(), Bottom());
+		}
+
+		Vector Rect::Center() const
+		{
+			return Vector(Left + Width / 2, Top + Height / 2);
+		}
+
+		Vector Rect::Size() const
+		{
+			return Vector(Width, Height);
 		}
 	}
 }

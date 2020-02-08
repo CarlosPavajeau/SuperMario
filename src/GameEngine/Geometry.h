@@ -19,15 +19,14 @@ namespace GameEngine
 		{
 			Vector()
 			{
-				X = Y = Angle = Lenght = 0;
+				X = Y = 0;
 			}
+
 			Vector(float x, float y);
 			Vector(int x, int y);
 
 			Vector(const sf::Vector2f& vector);
 			operator sf::Vector2f() const;
-
-			void Inicialize();
 
 			Vector operator-() const;
 			Vector operator+(const Vector& right) const;
@@ -43,6 +42,9 @@ namespace GameEngine
 			bool operator!=(const Vector& right) const;
 			bool operator<(const Vector& right) const;
 
+			float Lenght() const;
+			float Angle() const;
+
 			Vector Normalized() const;
 			void Normalize();
 
@@ -55,19 +57,9 @@ namespace GameEngine
 			const static Vector Zero;
 
 			float X, Y;
-			float Lenght, Angle;
 		};
 
 		std::ostream& operator<<(std::ostream& os, const Vector& vector);
-
-		enum class VectorDirection
-		{
-			Right,
-			Left,
-			Up,
-			Down
-		};
-
 
 		Vector ToVector(const std::string& vectordirection);
 		Vector RotateClockwise(const Vector& direction);
@@ -83,8 +75,6 @@ namespace GameEngine
 			Rect(float left, float top, float width, float height);
 			Rect(const Vector& top_left, const Vector& size);
 
-			void Inicialize();
-
 			bool IsContain(const Vector& point) const;
 			bool IsContain(const Rect& rect) const;
 			bool IsContainByX(const Vector& point) const;
@@ -99,16 +89,17 @@ namespace GameEngine
 
 			void SetLeft(int left);
 			void SetRight(int right);
-			void SetButtom(int buttom);
+			void SetBottom(int buttom);
 			void SetTop(int top);
 
 			void Normalize();
 			Rect Moved(const Vector& diff) const;
 
-			Vector LeftTop, RightTop, LeftButton, RightButton,
-				Center, Size;
+			float Right() const, Bottom() const;
+			Vector LeftTop() const, RightTop() const, LeftButton() const, RightBottom() const,
+				Center() const, Size() const;
 
-			float Right, Left, Top, Buttom, Width, Height;
+			float Left, Top, Width, Height;
 		};
 	}
 }
