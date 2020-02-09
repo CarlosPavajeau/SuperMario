@@ -27,7 +27,7 @@ namespace GameEngine
 			_width = width;
 			_height = height;
 
-			_map = new T * [width];
+			_map = new T*[width];
 
 			for (int x = 0; x < width; ++x)
 			{
@@ -47,18 +47,18 @@ namespace GameEngine
 
 		inline void SetCell(int x, int y, T value)
 		{
-			assert(x < _width && y < _height && x >= 0 && y >= 0);
+			assert(InBounds({ x, y }));
 			_map[x][y] = value;
 		}
 
 		inline const T& GetCell(const Vector& point) const
 		{
-			return GetCell((int)point.X, (int)point.Y);
+			return GetCell(point.X, point.Y);
 		}
 
 		inline const T& GetCell(int x, int y) const
 		{
-			assert(x < _width && y < _height && x >= 0 && y >= 0);
+			assert(InBounds({ x, y }));
 			return _map[x][y];
 		}
 
@@ -93,8 +93,8 @@ namespace GameEngine
 			assert((_width * _height) == str.length());
 
 			int i = 0;
-			for (int y = 0; y < _height; ++y)
-				for (int x = 0; x < _width; ++x)
+			for (size_t y = 0; y < _height; ++y)
+				for (size_t x = 0; x < _width; ++x)
 					SetCell(x, y, dictionary[str[i++]]);
 		}
 
@@ -119,7 +119,7 @@ namespace GameEngine
 			if (!file.is_open())
 				throw std::rutime_error("Can't load file: " + filePath);
 
-			sdt::string str;
+			std::string str;
 			for (int y = 0; y < _height; ++y)
 			{
 				std::getline(file, str);
@@ -155,8 +155,8 @@ namespace GameEngine
 		{
 			std::vector<std::pair<Vector, T>> cells;
 
-			for (int x = rect.Left; x < rect.Right; ++x)
-				for (int y = rect.Top; y < rect.Buttom; ++y)
+			for (int x = rect.Left; x < rect.Right(); ++x)
+				for (int y = rect.Top; y < rect.Bottom(); ++y)
 					cells.push_back({ Vector(x, y), GetCell(x, y) });
 			return cells;
 		}
