@@ -78,7 +78,7 @@ namespace GameEngine
 
     Vector CollsionResponse(const Rect& own_rect, const Vector& own_speed, const Rect& other_rect, const Vector& other_speed, const float delta_time, CollisionTag& collision_tag)
     {
-        Vector new_pos = own_rect.LeftTop;
+        Vector new_pos = own_rect.LeftTop();
 
         Rect intersection = other_rect.GetIntersection(own_rect);
         Vector delta_speed = own_speed - other_speed;
@@ -124,14 +124,14 @@ namespace GameEngine
         {
             if (intersection.Top == other_rect.Top)
                 collision_tag |= CollisionTag::Floor;
-            else if (intersection.Buttom == other_rect.Buttom)
+            else if (intersection.Bottom() == other_rect.Bottom())
                 collision_tag |= CollisionTag::Cell;
         }
         else if (axis == Horizontal)
         {
             if (intersection.Left == other_rect.Left)
                 collision_tag |= CollisionTag::Right;
-            else if (intersection.Right == other_rect.Right)
+            else if (intersection.Right() == other_rect.Right())
                 collision_tag |= CollisionTag::Left;
         }
 

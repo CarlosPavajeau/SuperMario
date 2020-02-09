@@ -2,7 +2,6 @@
 #define MARIO_H
 
 #include "GameObject.h"
-#include "GameEngine.h"
 #include "Pallete.h"
 
 namespace GameObjects
@@ -14,6 +13,7 @@ namespace GameObjects
 namespace GameEngine
 {
 	class Animator;
+	enum class CollisionTag;
 }
 
 using namespace GameEngine;

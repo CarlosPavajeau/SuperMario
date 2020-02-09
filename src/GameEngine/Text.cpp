@@ -41,7 +41,7 @@ namespace GameEngine
 			offset.Y = time * 0.03f * splash_vector.Y;
 
 			offset.X *= 2;
-			color = (int)time * 0.2f;
+			color = time * 0.2f;
 			if (color >= 255)
 				flashing = false;
 
@@ -79,7 +79,7 @@ namespace GameEngine
 
 	FlowText* FlowText::Clone() const
 	{
-		auto flow_text = new FlowText(*text.getFont());
+		FlowText* flow_text = new FlowText(*text.getFont());
 		flow_text->text = text;
 		flow_text->splash_vector = splash_vector;
 		return flow_text;
@@ -160,7 +160,7 @@ namespace GameEngine
 		if (sprite.getTexture())
 		{
 			sprite.setPosition(sf::Vector2f(x, y));
-			sprite.setScale((float)w / sprite.getTextureRect().width, (float)h / sprite.getTextureRect().height);
+			sprite.setScale(w / sprite.getTextureRect().width, h / sprite.getTextureRect().height);
 		}
 	}
 
@@ -207,7 +207,7 @@ namespace GameEngine
 		if (!text.getString().isEmpty())
 		{
 			if (text_align == TextAling::Center)
-				text.setPosition(GetPosition() + rect.Size / 2 - Vector(text.getGlobalBounds().width, text.getGlobalBounds().height) / 2);
+				text.setPosition(GetPosition() + rect.Size() / 2 - Vector(text.getGlobalBounds().width, text.getGlobalBounds().height) / 2);
 			else if (text_align == TextAling::Left)
 				text.setPosition(GetPosition().X, GetPosition().Y);
 

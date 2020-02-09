@@ -7,6 +7,7 @@
 #include "Animator.h"
 #include "Ladder.h"
 #include "Blocks.h"
+#include "GameEngine.h"
 
 using namespace GameObjects;
 
@@ -15,6 +16,8 @@ namespace Creatures
 	Mario::Mario()
 	{
 		blocks = nullptr;
+		rank = MarioRank::Small;
+		state = MarioState::Normal;
 
 		const sf::Texture& texture = *sMarioGame->TextureManager().Get("Mario");
 
@@ -192,7 +195,7 @@ namespace Creatures
 
 	void Mario::Fire()
 	{
-		Vector pos = GetBounds().Center + direction * 25 + Vector::Up * 8;
+		Vector pos = GetBounds().Center() + direction * 25 + Vector::Up * 8;
 		GetParent()->AddObject(new MarioBullet(pos, direction));
 		sMarioGame->PlaySound("fireball");
 	}
@@ -268,7 +271,7 @@ namespace Creatures
 				}
 				else if (input_direction == Vector::Down)
 				{
-					if (GetBounds().Buttom <= used_ladder->GetBounds().Buttom)
+					if (GetBounds().Bottom() <= used_ladder->GetBounds().Bottom())
 						Move(climb_speed * Vector::Down * delta_time);
 				}
 			}
@@ -386,8 +389,8 @@ namespace Creatures
 					climb = true;
 					jumped = true;
 
-					int x_ladder = ladder->GetBounds().Center.X;
-					if (x_ladder > GetBounds().Center.X)
+					int x_ladder = ladder->GetBounds().Center().X;
+					if (x_ladder > GetBounds().Center().X)
 					{
 						SetPosition(x_ladder - GetBounds().Width, GetPosition().Y);
 						animator->FlipX(false);
@@ -420,8 +423,8 @@ namespace Creatures
 	{
 		if (collision_tag & CollisionTag::Cell && !(collision_tag & CollisionTag::Floor))
 		{
-			Vector block_left = blocks->ToBlockCoordinates(GetBounds().LeftTop + Vector::Up * 16);
-			Vector block_right = blocks->ToBlockCoordinates(GetBounds().RightTop + Vector::Up * 16);
+			Vector block_left = blocks->ToBlockCoordinates(GetBounds().LeftTop() + Vector::Up * 16);
+			Vector block_right = blocks->ToBlockCoordinates(GetBounds().RightTop() + Vector::Up * 16);
 
 			bool block_left_exist = blocks->IsBlockInBounds(block_left) && (blocks->IsCollidableBlock(block_left) || blocks->IsInvizibleBlock(block_left));
 			bool block_right_exist = blocks->IsBlockInBounds(block_right) && (blocks->IsCollidableBlock(block_right) || blocks->IsInvizibleBlock(block_right));
@@ -440,9 +443,9 @@ namespace Creatures
 					Rect block_left_rect = blocks->GetBlockBounds(block_left);
 					Rect block_right_rect = blocks->GetBlockBounds(block_right);
 
-					float mario_x = GetBounds().Center.X;
+					float mario_x = GetBounds().Center().X;
 
-					if (std::abs(block_left_rect.Center.X - mario_x) < std::abs(block_right_rect.Center.X - mario_x))
+					if (std::abs(block_left_rect.Center().X - mario_x) < std::abs(block_right_rect.Center().X - mario_x))
 						blocks->KickBlock(block_left.X, block_left.Y, this);
 					else
 						blocks->KickBlock(block_right.X, block_right.Y, this);
@@ -469,7 +472,7 @@ namespace Creatures
 						{
 							Rect intersection = GetBounds().GetIntersection(enemy->GetBounds());
 							if (intersection.Height / 8 < intersection.Width &&
-								intersection.Buttom == GetBounds().Buttom)
+								intersection.Bottom() == GetBounds().Bottom())
 							{
 								enemy->KickFromTop(this);
 								Move(-speed * delta_time);

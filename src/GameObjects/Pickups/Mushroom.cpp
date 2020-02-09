@@ -2,6 +2,7 @@
 #include "Mario.h"
 #include "MarioGame.h"
 #include "Blocks.h"
+#include "GameEngine.h"
 
 namespace GameObjects
 {
@@ -39,7 +40,7 @@ namespace GameObjects
 				if (timer > 400)
 				{
 					state = State::Borning;
-					sMarioGame->PlaySound("powerup_apperars");
+					sMarioGame->PlaySound("powerup_appears");
 					timer = 0;
 				}
 
@@ -53,12 +54,12 @@ namespace GameObjects
 				{
 					sprite.setTextureRect({ sprite.getTextureRect().left, sprite.getTextureRect().top, 32, height });
 					Rect old_bounds = GetBounds();
-					old_bounds.SetTop(old_bounds.Buttom - height);
+					old_bounds.SetTop(old_bounds.Bottom() - height);
 					SetBounds(old_bounds);
 				}
 				else
 				{
-					state == State::Normal;
+					state = State::Normal;
 					speed = Vector::Zero;
 				}
 
@@ -113,7 +114,7 @@ namespace GameObjects
 	void Mushroom::Action()
 	{
 		mario->Promote();
-		sMarioGame->AddScore(1000, GetBounds().Center);
+		sMarioGame->AddScore(1000, GetBounds().Center());
 		sMarioGame->PlaySound("powerup");
 	}
 

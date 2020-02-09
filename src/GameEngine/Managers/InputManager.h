@@ -24,11 +24,12 @@ namespace GameEngine
 			void Update(int delta_time);
 
 		private:
-			std::unordered_map<sf::Keyboard::Key, bool> m_keys_prev, * m_keys_prev_ptr, m_keys_now, * m_keys_now_ptr;
-			std::unordered_map<int, bool> m_jsk_btns_prev, * m_jsk_btns_prev_ptr, m_jsk_btns_now, * m_jsk_btns_now_ptr;
+			std::unordered_map<sf::Keyboard::Key, bool> m_keys_prev, *m_keys_prev_ptr, m_keys_now, *m_keys_now_ptr;
+			std::unordered_map<int, bool> m_jsk_btns_prev, *m_jsk_btns_prev_ptr, m_jsk_btns_now, *m_jsk_btns_now_ptr;
 			sf::Keyboard::Key m_axis_keys[4];
 			std::unordered_map<std::string, sf::Keyboard::Key> m_btn_to_key;
 			std::unordered_map<std::string, int> m_jsk_btn_to_key;
+
 			bool IsKeyJustPressed(const sf::Keyboard::Key& key) const;
 			bool IsKeyJustReleased(const sf::Keyboard::Key& key) const;
 			bool IsKeyPressed(const sf::Keyboard::Key& key) const;

@@ -33,7 +33,7 @@ namespace GameObjects
 		Blocks* blocks;
 		Vector speed;
 
-		enum State
+		enum class State
 		{
 			Wait,
 			Borning,

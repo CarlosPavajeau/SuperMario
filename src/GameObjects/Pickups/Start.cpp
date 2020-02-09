@@ -2,6 +2,7 @@
 #include "Mario.h"
 #include "Blocks.h"
 #include "MarioGame.h"
+#include "GameEngine.h"
 
 using namespace Creatures;
 
@@ -52,7 +53,7 @@ namespace GameObjects
 				{
 					sprite.setTextureRect({ 128 + sprite_index * 32 ,212,32,height });
 					Rect old_bounds = GetBounds();
-					old_bounds.SetTop(old_bounds.Buttom - height);
+					old_bounds.SetTop(old_bounds.Bottom() - height);
 					SetBounds(old_bounds);
 				}
 				else

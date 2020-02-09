@@ -1,5 +1,5 @@
 #include "InputManager.h"
-#include "..\GameEngine.h"
+#include "GameEngine.h"
 
 namespace GameEngine
 {
@@ -20,8 +20,8 @@ namespace GameEngine
 
 		void InputManager::RegisterKey(const sf::Keyboard::Key& key)
 		{
-			m_keys_prev.insert(std::make_pair(key, false));
-			m_keys_now.insert(std::make_pair(key, false));
+			m_keys_prev.insert({ key, false });
+			m_keys_now.insert({ key, false });
 		}
 
 		void InputManager::UnregisterKey(const sf::Keyboard::Key& key)
@@ -32,8 +32,8 @@ namespace GameEngine
 
 		void InputManager::RegisterJoysticButton(int index)
 		{
-			m_jsk_btns_prev.insert(std::make_pair(index, false));
-			m_jsk_btns_now.insert(std::make_pair(index, false));
+			m_jsk_btns_prev.insert({ index, false });
+			m_jsk_btns_now.insert({ index, false });
 		}
 
 		bool InputManager::IsKeyJustPressed(const sf::Keyboard::Key& key) const
@@ -124,6 +124,7 @@ namespace GameEngine
 
 			if (key_map.find(str) != key_map.end())
 				return key_map.at(str);
+			return sf::Keyboard::Unknown;
 		}
 
 		void InputManager::SetupButton(const std::string& button, const std::vector<std::string>& keys)
